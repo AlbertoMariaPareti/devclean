@@ -1,6 +1,9 @@
 """Cross-check: the JS engine and the Python API must agree on every operation."""
-import json, subprocess
-import os, sys
+import json
+import os
+import subprocess
+import sys
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 import main
@@ -38,8 +41,14 @@ CASES = [
     ("spaces_to_tabs", "        x\n    y", {"tabSize": 4}),
     ("base64_encode", "Città già — 日本語 — 🎉", {}),
     ("base64_decode", "Q2l0dMOgIGdpw6A=", {}),
+    ("base64_decode", "Q2l0dMOgIGdpw6A", {}),           # padding stripped
+    ("base64_decode", "not base64!!", {}),              # must fail on both sides
     ("url_encode", "https://x.com/a b?q=cafè&p=2", {}),
     ("url_decode", "a+b%26c%20d", {}),
+    ("url_decode", "a+b%26c%20d", {"component": False}),
+    ("url_decode", "https%3A%2F%2Fa.com%2Fx%20y", {"component": False}),
+    ("url_decode", "%zz", {}),                          # malformed escape
+    ("url_decode", "%E0%A4%A", {}),                     # truncated UTF-8
     ("html_escape", '<b>a & "b"</b>', {}),
     ("html_unescape", "&lt;b&gt;a &amp; b&lt;/b&gt;&nbsp;x", {}),
     ("strip_html", "<div><h2>T</h2><p>A &amp; B</p><script>bad()</script><ul><li>1</li><li>2</li></ul></div>", {}),
@@ -68,7 +77,7 @@ if js_raw.returncode != 0:
 js_results = json.loads(js_raw.stdout)
 
 fails = 0
-for (op, text, opts), js in zip(CASES, js_results):
+for (op, text, opts), js in zip(CASES, js_results, strict=True):
     try:
         py = main.OPERATIONS[op](text, opts)
         py_ok = True

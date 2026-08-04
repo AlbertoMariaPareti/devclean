@@ -1,7 +1,10 @@
 """Post-build checks: links, metadata uniqueness, JSON-LD validity, accessibility basics."""
-import json, re
+import json
+import os
+import re
+import sys
 from html.parser import HTMLParser
-import os, sys
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 
