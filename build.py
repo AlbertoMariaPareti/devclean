@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 DevClean static site generator.
 
@@ -24,7 +23,7 @@ import sys
 from datetime import date
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "src"))
-from content import TOOLS, GUIDES  # noqa: E402
+from content import GUIDES, TOOLS  # noqa: E402
 
 # ==========================================================================
 # CONFIG — the handful of values you may want to change

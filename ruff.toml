@@ -1,0 +1,14 @@
+line-length = 100
+
+[lint]
+select = ["E", "F", "W", "I", "UP", "B"]
+
+# src/content.py is page copy: long prose strings are the content itself, not
+# lines that want wrapping.
+ignore = ["E501"]
+
+[lint.per-file-ignores]
+# The test scripts are written to be read top to bottom as a checklist, which
+# is why they use one-line statements and import after path setup.
+"tests/*.py" = ["E701", "E702", "E402"]
+"build.py" = ["E701", "E702"]

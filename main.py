@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 DevClean API — text cleaning operations over HTTP.
 
@@ -18,17 +17,37 @@ import base64
 import json
 import random
 import re
+import time
 import unicodedata
+from collections import defaultdict, deque
+from collections.abc import Callable
 from html import escape as html_escape
 from html.parser import HTMLParser
-from typing import Any, Callable
-from urllib.parse import quote, unquote_plus
+from threading import Lock
+from typing import Any
+from urllib.parse import quote
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
 MAX_CHARS = 200_000
+
+# Requests per client IP, per window, on /api/process.
+RATE_LIMIT_REQUESTS = 60
+RATE_LIMIT_WINDOW_SECONDS = 60
+
+
+class OperationError(ValueError):
+    """The input is not valid for the requested operation.
+
+    The operations below are plain functions of text: they are imported and
+    called directly by tests/test_parity.py, and they would be equally usable
+    from a CLI or a notebook. Raising HTTPException inside them would make the
+    text layer depend on the web layer, so they raise this instead and the
+    route translates it into a 400.
+    """
 
 app = FastAPI(
     title="DevClean API",
@@ -55,8 +74,90 @@ app.add_middleware(
 
 
 # ==========================================================================
+# Rate limiting
+# ==========================================================================
+#
+# /api/process accepts up to MAX_CHARS of text and runs regex work on it, so
+# an unthrottled endpoint on a free-tier instance is one loop away from being
+# unavailable to everyone else. This is a sliding window held in memory: it is
+# per-process, so it does not survive a restart and does not coordinate across
+# replicas. That is the right trade-off for a single small instance and the
+# wrong one for a horizontally scaled deployment, which should put the limit
+# in the proxy in front of the app instead.
+
+_hits: dict[str, deque[float]] = defaultdict(deque)
+_hits_lock = Lock()
+
+
+def _client_key(request: Request) -> str:
+    """Identify the caller, trusting the proxy header only for its first hop.
+
+    Hosts like Render and Fly terminate TLS in front of the app, so
+    request.client.host is the proxy for every caller. X-Forwarded-For is
+    client-controlled and can be forged; the first entry is still the best
+    signal available behind a trusted proxy.
+    """
+    forwarded = request.headers.get("x-forwarded-for")
+    if forwarded:
+        return forwarded.split(",")[0].strip()
+    return request.client.host if request.client else "unknown"
+
+
+def _rate_limit_exceeded(key: str, now: float) -> bool:
+    with _hits_lock:
+        window = _hits[key]
+        cutoff = now - RATE_LIMIT_WINDOW_SECONDS
+        while window and window[0] <= cutoff:
+            window.popleft()
+
+        if len(window) >= RATE_LIMIT_REQUESTS:
+            return True
+
+        window.append(now)
+
+        # Keep the table from growing without bound on a long-running process.
+        if len(_hits) > 10_000:
+            for stale in [k for k, v in _hits.items() if not v or v[-1] <= cutoff]:
+                del _hits[stale]
+
+        return False
+
+
+@app.middleware("http")
+async def rate_limit(request: Request, call_next):
+    if request.url.path == "/api/process" and request.method == "POST":
+        if _rate_limit_exceeded(_client_key(request), time.monotonic()):
+            return JSONResponse(
+                status_code=429,
+                content={
+                    "detail": (
+                        f"Rate limit exceeded: {RATE_LIMIT_REQUESTS} requests per "
+                        f"{RATE_LIMIT_WINDOW_SECONDS} seconds. The website itself "
+                        "runs every operation in the browser and is never rate "
+                        "limited: https://albertomariapareti.github.io/devclean/"
+                    )
+                },
+                headers={"Retry-After": str(RATE_LIMIT_WINDOW_SECONDS)},
+            )
+
+    return await call_next(request)
+
+
+# ==========================================================================
 # Helpers
 # ==========================================================================
+
+
+# Error messages are worded exactly as in assets/tools.js: tests/test_parity.py
+# compares failures as well as successes, so a reworded message is a test
+# failure rather than a silent divergence between the two implementations.
+BASE64_ERROR = (
+    "That does not look like valid Base64. Check for missing characters or padding."
+)
+URL_ERROR = "That string contains an invalid percent-encoding sequence."
+
+# Characters decodeURI leaves encoded.
+URI_RESERVED = frozenset(";/?:@&=+$,#")
 
 
 def split_lines(text: str) -> list[str]:
@@ -257,15 +358,15 @@ def op_pascal_case(text: str, o: dict) -> str:
 
 
 def op_snake_case(text: str, o: dict) -> str:
-    return _per_line(text, lambda l: "_".join(to_words(l)) or l)
+    return _per_line(text, lambda line_: "_".join(to_words(line_)) or line_)
 
 
 def op_kebab_case(text: str, o: dict) -> str:
-    return _per_line(text, lambda l: "-".join(to_words(l)) or l)
+    return _per_line(text, lambda line_: "-".join(to_words(line_)) or line_)
 
 
 def op_constant_case(text: str, o: dict) -> str:
-    return _per_line(text, lambda l: "_".join(to_words(l)).upper() or l)
+    return _per_line(text, lambda line_: "_".join(to_words(line_)).upper() or line_)
 
 
 def _natural_key(line: str):
@@ -302,11 +403,11 @@ def op_sort_desc(text: str, o: dict) -> str:
 
 
 def op_sort_length(text: str, o: dict) -> str:
-    return _sorted_preserving_trailing(text, key=lambda l: (len(l), _natural_key(l)))
+    return _sorted_preserving_trailing(text, key=lambda line_: (len(line_), _natural_key(line_)))
 
 
 def op_sort_length_desc(text: str, o: dict) -> str:
-    return _sorted_preserving_trailing(text, key=lambda l: (-len(l), _natural_key(l)))
+    return _sorted_preserving_trailing(text, key=lambda line_: (-len(line_), _natural_key(line_)))
 
 
 def op_reverse_lines(text: str, o: dict) -> str:
@@ -337,7 +438,7 @@ def op_add_prefix_suffix(text: str, o: dict) -> str:
     prefix, suffix = o.get("prefix", ""), o.get("suffix", "")
     skip_empty = o.get("skipEmpty", True)
     return _per_line(
-        text, lambda l: l if (skip_empty and not l.strip()) else f"{prefix}{l}{suffix}"
+        text, lambda line_: line_ if (skip_empty and not line_.strip()) else f"{prefix}{line_}{suffix}"
     )
 
 
@@ -370,13 +471,15 @@ def op_base64_encode(text: str, o: dict) -> str:
 
 def op_base64_decode(text: str, o: dict) -> str:
     cleaned = re.sub(r"\s+", "", text)
+    if not cleaned:
+        return ""
+    # The browser uses atob(), which accepts input whose padding was stripped;
+    # b64decode(validate=True) rejects it. Pad here so both agree.
+    cleaned += "=" * (-len(cleaned) % 4)
     try:
         return base64.b64decode(cleaned, validate=True).decode("utf-8")
     except Exception as exc:
-        raise HTTPException(
-            status_code=400,
-            detail="Input is not valid Base64 (check for missing characters or padding).",
-        ) from exc
+        raise OperationError(BASE64_ERROR) from exc
 
 
 def op_url_encode(text: str, o: dict) -> str:
@@ -384,13 +487,57 @@ def op_url_encode(text: str, o: dict) -> str:
     return quote(text, safe=safe)
 
 
+def _percent_decode(text: str, keep_reserved: bool) -> str:
+    """Decode %XX sequences the way the browser does.
+
+    Mirrors decodeURIComponent (keep_reserved=False) and decodeURI
+    (keep_reserved=True, which leaves the escapes for reserved characters
+    such as %2F and %23 untouched). Written by hand because urllib's unquote
+    silently passes malformed input through and decodes reserved characters
+    unconditionally, so neither mode matched the browser.
+    """
+    out: list[str] = []
+    pending = bytearray()
+
+    def flush() -> None:
+        if pending:
+            try:
+                out.append(pending.decode("utf-8"))
+            except UnicodeDecodeError as exc:
+                raise OperationError(URL_ERROR) from exc
+            pending.clear()
+
+    i, n = 0, len(text)
+    while i < n:
+        char = text[i]
+        if char != "%":
+            flush()
+            out.append(char)
+            i += 1
+            continue
+
+        pair = text[i + 1 : i + 3]
+        if len(pair) < 2 or any(c not in "0123456789abcdefABCDEF" for c in pair):
+            raise OperationError(URL_ERROR)
+
+        byte = int(pair, 16)
+        if keep_reserved and byte < 0x80 and chr(byte) in URI_RESERVED:
+            flush()
+            out.append(text[i : i + 3])
+        else:
+            pending.append(byte)
+        i += 3
+
+    flush()
+    return "".join(out)
+
+
 def op_url_decode(text: str, o: dict) -> str:
-    try:
-        return unquote_plus(text)
-    except Exception as exc:
-        raise HTTPException(
-            status_code=400, detail="Input contains an invalid percent-encoding sequence."
-        ) from exc
+    if o.get("component", True):
+        # decodeURIComponent treats '+' as a literal, but form encoding does
+        # not; the browser tool replaces it first, so do the same here.
+        return _percent_decode(text.replace("+", " "), keep_reserved=False)
+    return _percent_decode(text, keep_reserved=True)
 
 
 def op_html_escape(text: str, o: dict) -> str:
@@ -453,7 +600,7 @@ def op_text_stats(text: str, o: dict) -> str:
         ("Words", len(words)),
         ("Unique words", len(unique)),
         ("Lines", len(lines)),
-        ("Non-empty lines", sum(1 for l in lines if l.strip())),
+        ("Non-empty lines", sum(1 for line_ in lines if line_.strip())),
         ("Sentences", len(sentences)),
         ("Paragraphs", len(paragraphs)),
         ("Average word length",
@@ -619,8 +766,8 @@ def process_text(req: TextRequest) -> TextResponse:
 
     try:
         result = handler(req.text, req.options or {})
-    except HTTPException:
-        raise
+    except OperationError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
     except Exception as exc:  # pragma: no cover - defensive
         raise HTTPException(status_code=500, detail=f"Processing error: {exc}") from exc
 
