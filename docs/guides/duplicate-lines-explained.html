@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How to Remove Duplicate Lines: Excel, Command Line, SQL and More</title>
+  <meta name="description" content="Compare the practical ways to remove duplicate lines — spreadsheets, sort -u, awk, SQL and browser tools — and learn which preserves order.">
+  <link rel="canonical" href="https://albertomariapareti.github.io/devclean/guides/duplicate-lines-explained.html">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="DevClean">
+  <meta property="og:title" content="How to Remove Duplicate Lines: Excel, Command Line, SQL and More">
+  <meta property="og:description" content="Compare the practical ways to remove duplicate lines — spreadsheets, sort -u, awk, SQL and browser tools — and learn which preserves order.">
+  <meta property="og:url" content="https://albertomariapareti.github.io/devclean/guides/duplicate-lines-explained.html">
+  <meta property="og:image" content="https://albertomariapareti.github.io/devclean/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="How to Remove Duplicate Lines: Excel, Command Line, SQL and More">
+  <meta name="twitter:description" content="Compare the practical ways to remove duplicate lines — spreadsheets, sort -u, awk, SQL and browser tools — and learn which preserves order.">
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧹</text></svg>">
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="sitemap" type="application/xml" href="https://albertomariapareti.github.io/devclean/sitemap.xml">
+
+  <script>
+    // Apply the saved theme before first paint to avoid a flash of the wrong colours.
+    (function () {
+      try {
+        var t = localStorage.getItem('devclean-theme');
+        if (!t) t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XRYP95S3EV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XRYP95S3EV');
+  </script>
+  <!-- AdSense: set ADSENSE_CLIENT in build.py once your account is approved -->
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Five Ways to Remove Duplicate Lines, and When to Use Each","description":"Compare the practical ways to remove duplicate lines — spreadsheets, sort -u, awk, SQL and browser tools — and learn which preserves order.","author":{"@type":"Person","name":"Alberto Maria Pareti"},"publisher":{"@type":"Organization","name":"DevClean"},"datePublished":"2026-08-04","dateModified":"2026-08-04","mainEntityOfPage":"https://albertomariapareti.github.io/devclean/guides/duplicate-lines-explained.html"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://albertomariapareti.github.io/devclean/"},{"@type":"ListItem","position":2,"name":"Guides","item":"https://albertomariapareti.github.io/devclean/guides/"},{"@type":"ListItem","position":3,"name":"Five Ways to Remove Duplicate Lines, and When to Use Each","item":"https://albertomariapareti.github.io/devclean/guides/duplicate-lines-explained.html"}]}</script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../index.html">
+        <span class="brand-mark" aria-hidden="true">D</span>DevClean
+      </a>
+      <nav class="nav" aria-label="Main">
+        <a href="../index.html#tools">Tools</a>
+        <a href="../guides/index.html">Guides</a>
+        <a class="nav-hide-sm" href="../api.html">API</a>
+        <a class="nav-hide-sm" href="../about.html">About</a>
+        <button class="theme-toggle" type="button" aria-label="Switch theme">☀</button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="wrap">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><a href="../index.html">Home</a><span>/</span><a href="../guides/index.html">Guides</a><span>/</span>Five Ways to Remove Duplicate Lines, and When to Use Each</nav>
+      <article class="prose">
+        <h1>Five Ways to Remove Duplicate Lines, and When to Use Each</h1>
+        <p class="meta-line">6 min read · Updated 2026-08-04</p>
+
+      <!-- ad slot: top -->
+
+
+<p>Removing duplicates is one of those tasks with a dozen solutions, most of which
+are subtly wrong for your particular case. The differences come down to three
+questions: does it preserve the original order, does it handle near-matches, and
+how much data can it cope with?</p>
+
+<h2>The spreadsheet way</h2>
+
+<p>Excel and Google Sheets both offer <em>Data → Remove duplicates</em>, and for a
+one-off job on a few thousand rows it is hard to beat. It preserves order, it works
+across multiple columns, and you can see what happened immediately.</p>
+
+<p>The catch is what a spreadsheet does to your data on the way in. Paste a column
+of values and it will helpfully interpret them: leading zeros disappear from
+postcodes and account numbers, anything resembling a date becomes one, long numeric
+IDs turn into scientific notation, and a value like <code>+39 02 1234</code> may be
+read as a formula. None of these are recoverable after the fact. If your data is
+purely textual and none of it looks numeric, this is fine. Otherwise, set the
+column format to Text <em>before</em> pasting, or use something else.</p>
+
+<h2>sort -u on the command line</h2>
+
+<p><code>sort -u file.txt</code> is the shortest thing that works, and on large
+files it is extremely fast — it handles files larger than memory by spilling to
+disk. Every Unix-like system has it, including macOS and WSL.</p>
+
+<p>The important caveat is in the name: it <em>sorts</em>. The output is
+alphabetical, and the original order is gone. For a reference list that is fine or
+even desirable. For a log file, a chronological export, or any list where position
+carries meaning, it is destructive in a way that is not obvious until later.</p>
+
+<h2>awk, when order matters</h2>
+
+<p>The order-preserving equivalent is
+<code>awk '!seen[$0]++' file.txt</code>. It keeps the first occurrence of each line
+exactly where it was and drops the rest — the same behaviour as a well-behaved
+browser tool, at command-line speed.</p>
+
+<p>It is worth understanding rather than just copying. <code>seen</code> is an
+associative array keyed by the whole line; <code>seen[$0]++</code> returns the
+current count and then increments it, so the first time a line appears the
+expression is <code>0</code>, which awk treats as false. The <code>!</code> inverts
+it to true, and a bare true condition in awk means "print this line". Every
+subsequent occurrence returns a non-zero count, which is true, inverted to false,
+so nothing is printed.</p>
+
+<p>The limitation is memory: the array holds every distinct line, so a file with
+tens of millions of unique lines will exhaust RAM where <code>sort -u</code> would
+not.</p>
+
+<h2>SQL, when the data is already in a database</h2>
+
+<p><code>SELECT DISTINCT</code> is the obvious answer and usually the right one for
+whole-row duplicates. Where it gets more interesting is partial duplicates — rows
+that are the same in the columns you care about but differ elsewhere, such as an
+import timestamp.</p>
+
+<p>For that case, window functions are the modern approach:</p>
+
+<pre><code>SELECT * FROM (
+  SELECT *, ROW_NUMBER() OVER (
+    PARTITION BY email ORDER BY created_at
+  ) AS rn
+  FROM contacts
+) t WHERE rn = 1;</code></pre>
+
+<p>This keeps the earliest row per email address and discards later ones. Changing
+<code>ORDER BY created_at</code> to <code>created_at DESC</code> keeps the newest
+instead. The advantage over <code>DISTINCT</code> is that you decide explicitly
+which copy survives, rather than accepting whichever one the engine happens to
+return.</p>
+
+<h2>A browser tool</h2>
+
+<p>The case for doing it in a browser is convenience and privacy: nothing to
+install, nothing to remember, and with a client-side tool the data never leaves
+your machine. Order is preserved, and options such as case-insensitive matching are
+a checkbox rather than a flag you have to look up.</p>
+
+<p>The limit is size. A browser will comfortably handle lists in the tens of
+thousands of lines and struggle well before the point where <code>sort -u</code>
+would break a sweat. Use it for the everyday case — a list from an email, a column
+from a spreadsheet, a set of keywords — and reach for the command line when the
+file gets large.</p>
+
+<h2>Choosing</h2>
+
+<table>
+  <thead><tr><th>Method</th><th>Keeps order</th><th>Best for</th></tr></thead>
+  <tbody>
+    <tr><td>Spreadsheet</td><td>Yes</td><td>Small, purely textual data you are already editing</td></tr>
+    <tr><td><code>sort -u</code></td><td>No</td><td>Very large files where order does not matter</td></tr>
+    <tr><td><code>awk '!seen[$0]++'</code></td><td>Yes</td><td>Large files where order does matter</td></tr>
+    <tr><td>SQL window function</td><td>You choose</td><td>Records where you pick which copy survives</td></tr>
+    <tr><td>Browser tool</td><td>Yes</td><td>Everyday lists, sensitive data, no setup</td></tr>
+  </tbody>
+</table>
+
+<h2>The problem underneath all of them</h2>
+
+<p>Whichever method you pick, exact-match deduplication only removes lines that are
+byte-for-byte identical. The duplicates that actually cause trouble usually are
+not: <code>Mario Rossi</code> and <code>Rossi, Mario</code>, or the same address
+with and without a trailing space.</p>
+
+<p>Two habits help. First, normalise before you deduplicate — trim whitespace,
+decide on a case convention, and fix encoding problems. Half of all "near
+duplicates" turn out to be exact duplicates once the invisible characters are gone.
+Second, for the genuinely fuzzy remainder, accept that no automatic tool will be
+right every time; extract the candidates, look at them, and decide by hand. That is
+slower, but it is the only approach that does not quietly delete real data.</p>
+
+      </article>
+
+      <!-- ad slot: inline -->
+
+      <div class="related">
+        <h2>More guides</h2>
+        <ul>
+        <li><a href="cleaning-messy-data-before-import.html">Cleaning Messy Text Data Before You Import It</a></li>
+        <li><a href="json-arrays-in-practice.html">JSON Arrays in Practice: Escaping, Types and Common Mistakes</a></li>
+        <li><a href="why-client-side-tools-matter.html">Why It Matters That a Text Tool Runs in Your Browser</a></li>
+        </ul>
+      </div>
+
+      <!-- ad slot: bottom -->
+
+    </div>
+
+  </main>
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-cols">
+        <div>
+          <h4>Popular tools</h4>
+          <ul>
+          <li><a href="../tools/remove-duplicate-lines.html">Remove Duplicate Lines</a></li>
+          <li><a href="../tools/remove-extra-spaces.html">Remove Extra Spaces</a></li>
+          <li><a href="../tools/list-to-json-array.html">List to JSON Array</a></li>
+          <li><a href="../tools/case-converter.html">Case Converter</a></li>
+          <li><a href="../tools/sort-lines.html">Sort Lines</a></li>
+            <li><a href="../index.html#tools">All tools →</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Guides</h4>
+          <ul>
+          <li><a href="../guides/cleaning-messy-data-before-import.html">Cleaning Messy Text Data Before You Im…</a></li>
+          <li><a href="../guides/duplicate-lines-explained.html">Five Ways to Remove Duplicate Lines, a…</a></li>
+          <li><a href="../guides/json-arrays-in-practice.html">JSON Arrays in Practice: Escaping, Typ…</a></li>
+          <li><a href="../guides/why-client-side-tools-matter.html">Why It Matters That a Text Tool Runs i…</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Project</h4>
+          <ul>
+            <li><a href="../about.html">About</a></li>
+            <li><a href="../api.html">Developer API</a></li>
+            <li><a href="../privacy.html">Privacy policy</a></li>
+            <li><a href="https://github.com/AlbertoMariaPareti/devclean" rel="noopener">Source on GitHub</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Alberto Maria Pareti</span>
+        <span>All processing happens in your browser.</span>
+        <span class="spacer"></span>
+        <span>Updated 2026-08-04</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../assets/tools.js"></script>
+  <script src="../assets/app.js"></script>
+</body>
+</html>

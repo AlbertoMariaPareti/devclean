@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DevClean — Free online text and code cleaning tools</title>
+  <meta name="description" content="Free browser-based tools to remove duplicate lines, clean extra spaces, convert lists to JSON, change text case, encode Base64 and more. Nothing is uploaded.">
+  <link rel="canonical" href="https://albertomariapareti.github.io/devclean/">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="DevClean">
+  <meta property="og:title" content="DevClean — Free online text and code cleaning tools">
+  <meta property="og:description" content="Free browser-based tools to remove duplicate lines, clean extra spaces, convert lists to JSON, change text case, encode Base64 and more. Nothing is uploaded.">
+  <meta property="og:url" content="https://albertomariapareti.github.io/devclean/">
+  <meta property="og:image" content="https://albertomariapareti.github.io/devclean/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="DevClean — Free online text and code cleaning tools">
+  <meta name="twitter:description" content="Free browser-based tools to remove duplicate lines, clean extra spaces, convert lists to JSON, change text case, encode Base64 and more. Nothing is uploaded.">
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧹</text></svg>">
+  <link rel="stylesheet" href="assets/style.css">
+  <link rel="sitemap" type="application/xml" href="https://albertomariapareti.github.io/devclean/sitemap.xml">
+
+  <script>
+    // Apply the saved theme before first paint to avoid a flash of the wrong colours.
+    (function () {
+      try {
+        var t = localStorage.getItem('devclean-theme');
+        if (!t) t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XRYP95S3EV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XRYP95S3EV');
+  </script>
+  <!-- AdSense: set ADSENSE_CLIENT in build.py once your account is approved -->
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"DevClean","url":"https://albertomariapareti.github.io/devclean/","description":"Free online text and code cleaning tools"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is DevClean free?","acceptedAnswer":{"@type":"Answer","text":"Yes, every tool is free and there is no account to create. The site is supported by advertising."}},{"@type":"Question","name":"Is my data stored or sent anywhere?","acceptedAnswer":{"@type":"Answer","text":"No. All processing happens in your browser using JavaScript. Your text is never transmitted to any server."}},{"@type":"Question","name":"How much text can I process at once?","acceptedAnswer":{"@type":"Answer","text":"Up to 200,000 characters per run, roughly 30,000 words or 20,000 list items."}},{"@type":"Question","name":"Do the tools work offline?","acceptedAnswer":{"@type":"Answer","text":"Yes. Once a page has loaded it keeps working with no connection, because there is nothing to fetch."}}]}</script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="index.html">
+        <span class="brand-mark" aria-hidden="true">D</span>DevClean
+      </a>
+      <nav class="nav" aria-label="Main">
+        <a href="index.html#tools">Tools</a>
+        <a href="guides/index.html">Guides</a>
+        <a class="nav-hide-sm" href="api.html">API</a>
+        <a class="nav-hide-sm" href="about.html">About</a>
+        <button class="theme-toggle" type="button" aria-label="Switch theme">☀</button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="wrap">
+      <h1>Text cleaning tools that never upload your text</h1>
+      <p class="lede">10 focused tools for cleaning, converting and inspecting
+      text. Everything runs inside your browser, so your data never reaches a
+      server — and nothing breaks when you are offline.</p>
+
+      <!-- ad slot: top -->
+
+      <h2 id="tools">All tools</h2>
+      <ul class="tool-grid">
+      <li><a class="tool-card" href="tools/remove-duplicate-lines.html">
+        <strong>Remove Duplicate Lines</strong>
+        <span>Strip repeated lines from a list while keeping the original order.</span>
+      </a></li>
+      <li><a class="tool-card" href="tools/remove-extra-spaces.html">
+        <strong>Remove Extra Spaces</strong>
+        <span>Collapse double spaces, trailing whitespace and empty lines.</span>
+      </a></li>
+      <li><a class="tool-card" href="tools/list-to-json-array.html">
+        <strong>List to JSON Array</strong>
+        <span>Turn one-item-per-line lists into a valid JSON array.</span>
+      </a></li>
+      <li><a class="tool-card" href="tools/case-converter.html">
+        <strong>Case Converter</strong>
+        <span>Switch between UPPER, lower, Title, camelCase, snake_case and more.</span>
+      </a></li>
+      <li><a class="tool-card" href="tools/sort-lines.html">
+        <strong>Sort Lines</strong>
+        <span>Sort A–Z, by length, reverse or shuffle. Numbering included.</span>
+      </a></li>
+      <li><a class="tool-card" href="tools/tabs-to-spaces.html">
+        <strong>Tabs to Spaces</strong>
+        <span>Convert indentation between tabs and spaces, tab stops respected.</span>
+      </a></li>
+      <li><a class="tool-card" href="tools/base64-encode-decode.html">
+        <strong>Base64 Encode / Decode</strong>
+        <span>Encode and decode Base64 with correct UTF-8 handling.</span>
+      </a></li>
+      <li><a class="tool-card" href="tools/url-encode-decode.html">
+        <strong>URL Encode / Decode</strong>
+        <span>Percent-encode text for query strings, or decode it back.</span>
+      </a></li>
+      <li><a class="tool-card" href="tools/remove-html-tags.html">
+        <strong>Remove HTML Tags</strong>
+        <span>Strip tags to plain text, or escape and unescape HTML entities.</span>
+      </a></li>
+      <li><a class="tool-card" href="tools/word-character-counter.html">
+        <strong>Word &amp; Character Counter</strong>
+        <span>Count words, characters, lines, sentences and reading time.</span>
+      </a></li>
+      </ul>
+
+      <div class="prose">
+        <h2>Why these tools work differently</h2>
+        <p>Most online text utilities send whatever you paste to a server, process
+        it there, and send the result back. That is invisible from the interface,
+        and for a shopping list it does not matter. For a customer export, a
+        configuration file or an authentication token, it matters a great deal.</p>
+
+        <p>DevClean ships the processing code to your browser instead and runs it
+        locally. Your text is never transmitted, which removes the privacy question
+        entirely and has a pleasant side effect: results are instant, because there
+        is no network round trip and no server waking up from sleep.</p>
+
+        <p>You do not have to take that on trust. Open your browser's developer
+        tools, switch to the Network tab, and run any tool on this site — no request
+        appears. Or load a page, disconnect from the internet, and keep working.</p>
+
+      <!-- ad slot: inline -->
+
+        <h2>Guides</h2>
+        <p>Longer pieces on the problems these tools exist to solve.</p>
+      </div>
+
+      <ul class="tool-grid">
+      <li><a class="tool-card" href="guides/cleaning-messy-data-before-import.html">
+        <strong>Cleaning Messy Text Data Before You Import It</strong>
+        <span>The right order of operations for cleaning an export, and why sequence matters.</span>
+      </a></li>
+      <li><a class="tool-card" href="guides/duplicate-lines-explained.html">
+        <strong>Five Ways to Remove Duplicate Lines, and When to Use Each</strong>
+        <span>Spreadsheet, command line, SQL or browser — a comparison of the real options.</span>
+      </a></li>
+      <li><a class="tool-card" href="guides/json-arrays-in-practice.html">
+        <strong>JSON Arrays in Practice: Escaping, Types and Common Mistakes</strong>
+        <span>Why hand-written JSON breaks, and how to read a parse error properly.</span>
+      </a></li>
+      <li><a class="tool-card" href="guides/why-client-side-tools-matter.html">
+        <strong>Why It Matters That a Text Tool Runs in Your Browser</strong>
+        <span>What happens to text you paste online, and how to check for yourself.</span>
+      </a></li>
+      </ul>
+
+      <div class="prose">
+        <h2>Frequently asked questions</h2>
+      </div>
+      <div class="faq">
+        <details><summary>Is DevClean free?</summary><div><p>Yes, every tool is free
+        and there is no account to create. The site is supported by advertising.</p></div></details>
+        <details><summary>Is my data stored or sent anywhere?</summary><div><p>No. All
+        processing happens in your browser using JavaScript. Your text is never
+        transmitted to any server, and nothing is stored beyond your current tab.</p></div></details>
+        <details><summary>How much text can I process at once?</summary><div><p>Up to
+        200,000 characters per run, which is roughly 30,000 words or 20,000 list
+        items. For larger files, split the input or use the command-line
+        alternatives described in the guides.</p></div></details>
+        <details><summary>Do the tools work offline?</summary><div><p>Yes. Once a page
+        has loaded, it keeps working with no connection, because there is nothing to
+        fetch.</p></div></details>
+        <details><summary>Is there an API?</summary><div><p>Yes — a small HTTP API is
+        available for automating these operations in scripts and pipelines. See the
+        <a href="api.html">API page</a>.</p></div></details>
+      </div>
+
+      <!-- ad slot: bottom -->
+
+    </div>
+
+  </main>
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-cols">
+        <div>
+          <h4>Popular tools</h4>
+          <ul>
+          <li><a href="tools/remove-duplicate-lines.html">Remove Duplicate Lines</a></li>
+          <li><a href="tools/remove-extra-spaces.html">Remove Extra Spaces</a></li>
+          <li><a href="tools/list-to-json-array.html">List to JSON Array</a></li>
+          <li><a href="tools/case-converter.html">Case Converter</a></li>
+          <li><a href="tools/sort-lines.html">Sort Lines</a></li>
+            <li><a href="index.html#tools">All tools →</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Guides</h4>
+          <ul>
+          <li><a href="guides/cleaning-messy-data-before-import.html">Cleaning Messy Text Data Before You Im…</a></li>
+          <li><a href="guides/duplicate-lines-explained.html">Five Ways to Remove Duplicate Lines, a…</a></li>
+          <li><a href="guides/json-arrays-in-practice.html">JSON Arrays in Practice: Escaping, Typ…</a></li>
+          <li><a href="guides/why-client-side-tools-matter.html">Why It Matters That a Text Tool Runs i…</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Project</h4>
+          <ul>
+            <li><a href="about.html">About</a></li>
+            <li><a href="api.html">Developer API</a></li>
+            <li><a href="privacy.html">Privacy policy</a></li>
+            <li><a href="https://github.com/AlbertoMariaPareti/devclean" rel="noopener">Source on GitHub</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Alberto Maria Pareti</span>
+        <span>All processing happens in your browser.</span>
+        <span class="spacer"></span>
+        <span>Updated 2026-08-04</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/tools.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>

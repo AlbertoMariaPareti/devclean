@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Guides — DevClean</title>
+  <meta name="description" content="Practical guides on cleaning messy text data, removing duplicates, working with JSON arrays and why client-side tools protect your privacy.">
+  <link rel="canonical" href="https://albertomariapareti.github.io/devclean/guides/">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="DevClean">
+  <meta property="og:title" content="Guides — DevClean">
+  <meta property="og:description" content="Practical guides on cleaning messy text data, removing duplicates, working with JSON arrays and why client-side tools protect your privacy.">
+  <meta property="og:url" content="https://albertomariapareti.github.io/devclean/guides/">
+  <meta property="og:image" content="https://albertomariapareti.github.io/devclean/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Guides — DevClean">
+  <meta name="twitter:description" content="Practical guides on cleaning messy text data, removing duplicates, working with JSON arrays and why client-side tools protect your privacy.">
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧹</text></svg>">
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="sitemap" type="application/xml" href="https://albertomariapareti.github.io/devclean/sitemap.xml">
+
+  <script>
+    // Apply the saved theme before first paint to avoid a flash of the wrong colours.
+    (function () {
+      try {
+        var t = localStorage.getItem('devclean-theme');
+        if (!t) t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XRYP95S3EV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XRYP95S3EV');
+  </script>
+  <!-- AdSense: set ADSENSE_CLIENT in build.py once your account is approved -->
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://albertomariapareti.github.io/devclean/"},{"@type":"ListItem","position":2,"name":"Guides","item":"https://albertomariapareti.github.io/devclean/guides/"}]}</script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../index.html">
+        <span class="brand-mark" aria-hidden="true">D</span>DevClean
+      </a>
+      <nav class="nav" aria-label="Main">
+        <a href="../index.html#tools">Tools</a>
+        <a href="../guides/index.html">Guides</a>
+        <a class="nav-hide-sm" href="../api.html">API</a>
+        <a class="nav-hide-sm" href="../about.html">About</a>
+        <button class="theme-toggle" type="button" aria-label="Switch theme">☀</button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="wrap">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><a href="../index.html">Home</a><span>/</span>Guides</nav>
+      <h1>Guides</h1>
+      <p class="lede">Longer articles on cleaning and converting text data —
+      the reasoning behind the tools, and the alternatives worth knowing.</p>
+
+      <!-- ad slot: top -->
+
+      <ul class="tool-grid">
+      <li><a class="tool-card" href="cleaning-messy-data-before-import.html">
+        <strong>Cleaning Messy Text Data Before You Import It</strong>
+        <span>The right order of operations for cleaning an export, and why sequence matters. · 7 min read</span>
+      </a></li>
+      <li><a class="tool-card" href="duplicate-lines-explained.html">
+        <strong>Five Ways to Remove Duplicate Lines, and When to Use Each</strong>
+        <span>Spreadsheet, command line, SQL or browser — a comparison of the real options. · 6 min read</span>
+      </a></li>
+      <li><a class="tool-card" href="json-arrays-in-practice.html">
+        <strong>JSON Arrays in Practice: Escaping, Types and Common Mistakes</strong>
+        <span>Why hand-written JSON breaks, and how to read a parse error properly. · 6 min read</span>
+      </a></li>
+      <li><a class="tool-card" href="why-client-side-tools-matter.html">
+        <strong>Why It Matters That a Text Tool Runs in Your Browser</strong>
+        <span>What happens to text you paste online, and how to check for yourself. · 5 min read</span>
+      </a></li>
+      </ul>
+
+      <!-- ad slot: bottom -->
+
+    </div>
+
+  </main>
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-cols">
+        <div>
+          <h4>Popular tools</h4>
+          <ul>
+          <li><a href="../tools/remove-duplicate-lines.html">Remove Duplicate Lines</a></li>
+          <li><a href="../tools/remove-extra-spaces.html">Remove Extra Spaces</a></li>
+          <li><a href="../tools/list-to-json-array.html">List to JSON Array</a></li>
+          <li><a href="../tools/case-converter.html">Case Converter</a></li>
+          <li><a href="../tools/sort-lines.html">Sort Lines</a></li>
+            <li><a href="../index.html#tools">All tools →</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Guides</h4>
+          <ul>
+          <li><a href="../guides/cleaning-messy-data-before-import.html">Cleaning Messy Text Data Before You Im…</a></li>
+          <li><a href="../guides/duplicate-lines-explained.html">Five Ways to Remove Duplicate Lines, a…</a></li>
+          <li><a href="../guides/json-arrays-in-practice.html">JSON Arrays in Practice: Escaping, Typ…</a></li>
+          <li><a href="../guides/why-client-side-tools-matter.html">Why It Matters That a Text Tool Runs i…</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Project</h4>
+          <ul>
+            <li><a href="../about.html">About</a></li>
+            <li><a href="../api.html">Developer API</a></li>
+            <li><a href="../privacy.html">Privacy policy</a></li>
+            <li><a href="https://github.com/AlbertoMariaPareti/devclean" rel="noopener">Source on GitHub</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Alberto Maria Pareti</span>
+        <span>All processing happens in your browser.</span>
+        <span class="spacer"></span>
+        <span>Updated 2026-08-04</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../assets/tools.js"></script>
+  <script src="../assets/app.js"></script>
+</body>
+</html>

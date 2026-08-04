@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How to Clean Messy Text Data Before Importing It</title>
+  <meta name="description" content="A step-by-step order of operations for cleaning exported lists and CSV data: whitespace, duplicates, encoding and structure, in the right sequence.">
+  <link rel="canonical" href="https://albertomariapareti.github.io/devclean/guides/cleaning-messy-data-before-import.html">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="DevClean">
+  <meta property="og:title" content="How to Clean Messy Text Data Before Importing It">
+  <meta property="og:description" content="A step-by-step order of operations for cleaning exported lists and CSV data: whitespace, duplicates, encoding and structure, in the right sequence.">
+  <meta property="og:url" content="https://albertomariapareti.github.io/devclean/guides/cleaning-messy-data-before-import.html">
+  <meta property="og:image" content="https://albertomariapareti.github.io/devclean/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="How to Clean Messy Text Data Before Importing It">
+  <meta name="twitter:description" content="A step-by-step order of operations for cleaning exported lists and CSV data: whitespace, duplicates, encoding and structure, in the right sequence.">
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧹</text></svg>">
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="sitemap" type="application/xml" href="https://albertomariapareti.github.io/devclean/sitemap.xml">
+
+  <script>
+    // Apply the saved theme before first paint to avoid a flash of the wrong colours.
+    (function () {
+      try {
+        var t = localStorage.getItem('devclean-theme');
+        if (!t) t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XRYP95S3EV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XRYP95S3EV');
+  </script>
+  <!-- AdSense: set ADSENSE_CLIENT in build.py once your account is approved -->
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Cleaning Messy Text Data Before You Import It","description":"A step-by-step order of operations for cleaning exported lists and CSV data: whitespace, duplicates, encoding and structure, in the right sequence.","author":{"@type":"Person","name":"Alberto Maria Pareti"},"publisher":{"@type":"Organization","name":"DevClean"},"datePublished":"2026-08-04","dateModified":"2026-08-04","mainEntityOfPage":"https://albertomariapareti.github.io/devclean/guides/cleaning-messy-data-before-import.html"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://albertomariapareti.github.io/devclean/"},{"@type":"ListItem","position":2,"name":"Guides","item":"https://albertomariapareti.github.io/devclean/guides/"},{"@type":"ListItem","position":3,"name":"Cleaning Messy Text Data Before You Import It","item":"https://albertomariapareti.github.io/devclean/guides/cleaning-messy-data-before-import.html"}]}</script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../index.html">
+        <span class="brand-mark" aria-hidden="true">D</span>DevClean
+      </a>
+      <nav class="nav" aria-label="Main">
+        <a href="../index.html#tools">Tools</a>
+        <a href="../guides/index.html">Guides</a>
+        <a class="nav-hide-sm" href="../api.html">API</a>
+        <a class="nav-hide-sm" href="../about.html">About</a>
+        <button class="theme-toggle" type="button" aria-label="Switch theme">☀</button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="wrap">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><a href="../index.html">Home</a><span>/</span><a href="../guides/index.html">Guides</a><span>/</span>Cleaning Messy Text Data Before You Import It</nav>
+      <article class="prose">
+        <h1>Cleaning Messy Text Data Before You Import It</h1>
+        <p class="meta-line">7 min read · Updated 2026-08-04</p>
+
+      <!-- ad slot: top -->
+
+
+<p>Every data import that goes wrong goes wrong in roughly the same way. The file
+looks fine on screen, the import reports success, and then a week later somebody
+notices there are two of everything, or that a column of postcodes has lost its
+leading zeros. The problems were present in the source data all along; they were
+simply invisible.</p>
+
+<p>What follows is an order of operations for cleaning exported text data. The
+order matters more than any individual step, because several of these operations
+interfere with each other if done in the wrong sequence.</p>
+
+<h2>1. Look at the file before you touch it</h2>
+
+<p>Before cleaning anything, find out what you actually have. Three questions
+answer most of it: how many lines are there, what does the first line contain, and
+are the line endings consistent?</p>
+
+<p>The line count tells you whether the export completed. A suspiciously round
+number — exactly 1,000 or 5,000 rows — often means you hit a pagination limit and
+are looking at a partial export. The first line tells you whether there is a header
+row, which almost every subsequent step needs to know about. Line endings matter
+because a file produced on Windows uses <code>\r\n</code> and one from macOS or
+Linux uses <code>\n</code>; mixed endings inside a single file are a reliable sign
+that it has been edited by several tools in sequence, and they cause trailing
+carriage returns to end up inside your values.</p>
+
+<h2>2. Normalise whitespace first</h2>
+
+<p>This step comes first because everything downstream depends on exact string
+comparison, and whitespace is what breaks exact comparison.</p>
+
+<p>Trailing spaces are the classic offender. They are invisible, they survive
+copy-paste, and they mean that <code>"Milan "</code> and <code>"Milan"</code> are
+two different values as far as any computer is concerned. Deduplication will not
+catch them. Lookups against a reference table will fail on them. Grouping in a
+pivot table will produce two rows that look identical.</p>
+
+<p>Non-breaking spaces deserve a special mention. Text copied from a web page or a
+Word document frequently contains U+00A0 instead of a regular space. It renders
+identically, it is not matched by a search for a normal space, and it will quietly
+defeat every cleanup you attempt until you specifically look for it.</p>
+
+<p>The one thing to be careful about at this stage is indentation. If your data is
+actually structured text — YAML, Python, Markdown — leading whitespace is content,
+not noise, and a cleaner that collapses all runs of spaces will destroy it. Use a
+tool that separates leading whitespace from the rest of the line.</p>
+
+<h2>3. Fix encoding before you fix anything else textual</h2>
+
+<p>If you see <code>Ã¨</code> where <code>è</code> should be, or <code>â€™</code>
+where an apostrophe belongs, you are looking at mojibake: UTF-8 bytes that have
+been interpreted as a single-byte encoding, usually Windows-1252. This is not a
+find-and-replace problem, even though it is tempting to treat it as one. Every
+accented character produces a different mangled sequence, and patching them one at
+a time guarantees you will miss some.</p>
+
+<p>The correct fix is to re-export or re-open the file with the right encoding
+declared. If that is genuinely impossible, a systematic transcoding pass is the
+next best option — but do it before deduplication, because mojibake creates
+near-duplicates that differ only in their mangled characters, and deduplicating
+first will leave you with both versions.</p>
+
+<h2>4. Then deduplicate</h2>
+
+<p>Deduplication belongs after whitespace and encoding cleanup, for the reason just
+given: those two problems create pairs of records that are semantically identical
+but textually different. Deduplicate too early and you keep both.</p>
+
+<p>Decide deliberately whether matching should be case-sensitive. For email
+addresses it should not be — the domain part is definitively case-insensitive, and
+in practice the local part is treated that way by essentially every mail provider.
+For anything that is a genuine identifier, such as a Base64 token or a
+case-sensitive product code, it must be.</p>
+
+<p>Also decide what "duplicate" means for your data. Two rows with the same email
+address but different names may be a genuine duplicate with a typo in one copy, or
+two people sharing a family address. Line-level deduplication cannot tell the
+difference, so for records rather than simple lists, extract the key column first
+and inspect what repeats before deleting anything.</p>
+
+<h2>5. Convert structure last</h2>
+
+<p>Only once the text is clean should you convert it into its target
+structure — JSON, a database table, a spreadsheet import. Structure conversion is
+the step that locks in whatever mistakes remain, because after it the data is no
+longer a flat list you can easily re-clean.</p>
+
+<p>The trap at this stage is type inference. Anything that helpfully guesses types
+will convert <code>01234</code> to <code>1234</code>, <code>1.10</code> to
+<code>1.1</code>, and a product code like <code>2024-01</code> to a date. All three
+are lossy and none of them are reversible. When a value is an identifier rather
+than a quantity, keep it as text — even when it consists entirely of digits. The
+test is simple: would you ever do arithmetic with it? If not, it is text.</p>
+
+<h2>6. Verify with counts, not with eyes</h2>
+
+<p>Finish by checking numbers rather than scrolling. Compare the line count before
+and after each step and make sure every change is one you intended. If
+deduplication removed 4,000 of 10,000 rows, that is either a genuinely duplicated
+export or a sign that you deduplicated on the wrong field — both are worth knowing
+before you import.</p>
+
+<p>Count how many rows have empty values in the fields that matter. Check that the
+first and last rows still look like data rather than headers or footers. If you
+started with a header row, confirm it is still there — or deliberately gone.</p>
+
+<div class="callout">
+<p><strong>The short version:</strong> whitespace, then encoding, then duplicates,
+then structure, then verify by counting. Every one of those steps done out of
+order creates work for the next one.</p>
+</div>
+
+<h2>A note on doing this in the browser</h2>
+
+<p>For files up to a few megabytes, browser-based tools are a reasonable choice for
+these steps, and they have one specific advantage worth naming: the data never
+leaves your machine. That matters when the export contains customer records,
+addresses or anything else you would rather not paste into a service whose
+retention policy you have not read. It is also the reason DevClean processes
+everything locally.</p>
+
+<p>Beyond a few hundred thousand rows, move to a proper tool — a script, a database,
+or a dedicated data-preparation application. The order of operations above stays
+exactly the same; only the implementation changes.</p>
+
+      </article>
+
+      <!-- ad slot: inline -->
+
+      <div class="related">
+        <h2>More guides</h2>
+        <ul>
+        <li><a href="duplicate-lines-explained.html">Five Ways to Remove Duplicate Lines, and When to Use Each</a></li>
+        <li><a href="json-arrays-in-practice.html">JSON Arrays in Practice: Escaping, Types and Common Mistakes</a></li>
+        <li><a href="why-client-side-tools-matter.html">Why It Matters That a Text Tool Runs in Your Browser</a></li>
+        </ul>
+      </div>
+
+      <!-- ad slot: bottom -->
+
+    </div>
+
+  </main>
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-cols">
+        <div>
+          <h4>Popular tools</h4>
+          <ul>
+          <li><a href="../tools/remove-duplicate-lines.html">Remove Duplicate Lines</a></li>
+          <li><a href="../tools/remove-extra-spaces.html">Remove Extra Spaces</a></li>
+          <li><a href="../tools/list-to-json-array.html">List to JSON Array</a></li>
+          <li><a href="../tools/case-converter.html">Case Converter</a></li>
+          <li><a href="../tools/sort-lines.html">Sort Lines</a></li>
+            <li><a href="../index.html#tools">All tools →</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Guides</h4>
+          <ul>
+          <li><a href="../guides/cleaning-messy-data-before-import.html">Cleaning Messy Text Data Before You Im…</a></li>
+          <li><a href="../guides/duplicate-lines-explained.html">Five Ways to Remove Duplicate Lines, a…</a></li>
+          <li><a href="../guides/json-arrays-in-practice.html">JSON Arrays in Practice: Escaping, Typ…</a></li>
+          <li><a href="../guides/why-client-side-tools-matter.html">Why It Matters That a Text Tool Runs i…</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Project</h4>
+          <ul>
+            <li><a href="../about.html">About</a></li>
+            <li><a href="../api.html">Developer API</a></li>
+            <li><a href="../privacy.html">Privacy policy</a></li>
+            <li><a href="https://github.com/AlbertoMariaPareti/devclean" rel="noopener">Source on GitHub</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Alberto Maria Pareti</span>
+        <span>All processing happens in your browser.</span>
+        <span class="spacer"></span>
+        <span>Updated 2026-08-04</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../assets/tools.js"></script>
+  <script src="../assets/app.js"></script>
+</body>
+</html>

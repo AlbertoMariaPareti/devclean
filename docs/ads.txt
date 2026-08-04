@@ -1,0 +1,3 @@
+# Once AdSense approves your account, replace the line below with your
+# real publisher ID (the pub-... part of your ca-pub-... client ID).
+# google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Client-Side vs Server-Side Text Tools — Privacy, Speed and Trust</title>
+  <meta name="description" content="What actually happens when you paste text into an online tool, how to tell whether it uploads your data, and why local processing is faster.">
+  <link rel="canonical" href="https://albertomariapareti.github.io/devclean/guides/why-client-side-tools-matter.html">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="DevClean">
+  <meta property="og:title" content="Client-Side vs Server-Side Text Tools — Privacy, Speed and Trust">
+  <meta property="og:description" content="What actually happens when you paste text into an online tool, how to tell whether it uploads your data, and why local processing is faster.">
+  <meta property="og:url" content="https://albertomariapareti.github.io/devclean/guides/why-client-side-tools-matter.html">
+  <meta property="og:image" content="https://albertomariapareti.github.io/devclean/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Client-Side vs Server-Side Text Tools — Privacy, Speed and Trust">
+  <meta name="twitter:description" content="What actually happens when you paste text into an online tool, how to tell whether it uploads your data, and why local processing is faster.">
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧹</text></svg>">
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="sitemap" type="application/xml" href="https://albertomariapareti.github.io/devclean/sitemap.xml">
+
+  <script>
+    // Apply the saved theme before first paint to avoid a flash of the wrong colours.
+    (function () {
+      try {
+        var t = localStorage.getItem('devclean-theme');
+        if (!t) t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XRYP95S3EV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XRYP95S3EV');
+  </script>
+  <!-- AdSense: set ADSENSE_CLIENT in build.py once your account is approved -->
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Why It Matters That a Text Tool Runs in Your Browser","description":"What actually happens when you paste text into an online tool, how to tell whether it uploads your data, and why local processing is faster.","author":{"@type":"Person","name":"Alberto Maria Pareti"},"publisher":{"@type":"Organization","name":"DevClean"},"datePublished":"2026-08-04","dateModified":"2026-08-04","mainEntityOfPage":"https://albertomariapareti.github.io/devclean/guides/why-client-side-tools-matter.html"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://albertomariapareti.github.io/devclean/"},{"@type":"ListItem","position":2,"name":"Guides","item":"https://albertomariapareti.github.io/devclean/guides/"},{"@type":"ListItem","position":3,"name":"Why It Matters That a Text Tool Runs in Your Browser","item":"https://albertomariapareti.github.io/devclean/guides/why-client-side-tools-matter.html"}]}</script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../index.html">
+        <span class="brand-mark" aria-hidden="true">D</span>DevClean
+      </a>
+      <nav class="nav" aria-label="Main">
+        <a href="../index.html#tools">Tools</a>
+        <a href="../guides/index.html">Guides</a>
+        <a class="nav-hide-sm" href="../api.html">API</a>
+        <a class="nav-hide-sm" href="../about.html">About</a>
+        <button class="theme-toggle" type="button" aria-label="Switch theme">☀</button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="wrap">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><a href="../index.html">Home</a><span>/</span><a href="../guides/index.html">Guides</a><span>/</span>Why It Matters That a Text Tool Runs in Your Browser</nav>
+      <article class="prose">
+        <h1>Why It Matters That a Text Tool Runs in Your Browser</h1>
+        <p class="meta-line">5 min read · Updated 2026-08-04</p>
+
+      <!-- ad slot: top -->
+
+
+<p>Pasting text into a website is such a routine action that almost nobody stops to
+ask where the text goes. For most online tools the answer is: to a server you know
+nothing about, run by people you have never heard of, under a retention policy you
+have not read.</p>
+
+<p>Usually that is harmless. Occasionally it is not, and the difference is worth
+being able to tell.</p>
+
+<h2>Two architectures</h2>
+
+<p>A <strong>server-side</strong> tool sends your text over the network. The server
+processes it and sends a result back. Your text exists, at minimum, in that
+server's memory; quite possibly in its access logs; and potentially in a database,
+a backup, an error-tracking service, or a request log kept by a proxy or CDN in
+between. Each of those is a normal, unremarkable piece of infrastructure, and each
+one is a place your text now lives.</p>
+
+<p>A <strong>client-side</strong> tool ships the processing code to your browser
+and runs it there. The text is transformed in memory on your own machine and never
+appears in a network request at all. There is no server to log it because the server
+was never involved.</p>
+
+<p>The distinction is invisible from the interface. Both look like a text box and a
+button.</p>
+
+<h2>When it actually matters</h2>
+
+<p>For a shopping list, it does not. For several common cases, it does:</p>
+
+<ul>
+  <li><strong>Customer data.</strong> A list of names, email addresses or order
+  references is personal data. Under the GDPR, sending it to a third-party service
+  is a transfer to a processor, and doing so without a legal basis or a data
+  processing agreement is a compliance problem regardless of how briefly the data
+  is held.</li>
+  <li><strong>Anything under NDA.</strong> Configuration files, internal
+  documentation, unreleased product names. Pasting these into an unknown service is
+  a disclosure, even if nobody ever looks at it.</li>
+  <li><strong>Credentials and tokens.</strong> Decoding a JWT to check its claims is
+  a completely routine debugging step — and if the tool is server-side, you have
+  just handed a valid session token to a stranger.</li>
+  <li><strong>Health, financial and legal text.</strong> Regulated categories where
+  the standard of care is higher and the consequences of a leak are not merely
+  reputational.</li>
+</ul>
+
+<h2>How to check for yourself</h2>
+
+<p>You do not have to take any site's word for it, including this one. Open your
+browser's developer tools with F12, switch to the Network tab, clear it, then run
+the tool. If a request appears when you click the button, your text was sent
+somewhere. If nothing appears, it was not.</p>
+
+<p>A stronger version of the same test: load the page, then disconnect from the
+internet entirely and try the tool again. A client-side tool keeps working. A
+server-side one cannot.</p>
+
+<p>Both checks take under a minute and are worth doing once for any tool you plan
+to use with data that matters.</p>
+
+<h2>The speed difference</h2>
+
+<p>Privacy is the headline, but latency is what you notice day to day. A
+server-side round trip costs the network time in both directions plus the server's
+processing time — realistically 100 to 300 milliseconds on a good connection.</p>
+
+<p>Free hosting adds a much larger penalty. Most free tiers put an idle service to
+sleep after a period of inactivity, and waking it takes 30 to 60 seconds. The first
+person to use the tool after a quiet spell waits the better part of a minute for an
+operation that takes microseconds. That is not a hypothetical: it is the single
+most common complaint about small hosted tools, and it disproportionately affects
+first-time visitors, who conclude the site is broken and leave.</p>
+
+<p>Client-side processing removes both costs. Typical text operations complete in
+under a millisecond, which is fast enough to run as you type rather than on a
+button press.</p>
+
+<h2>What client-side cannot do</h2>
+
+<p>It is not a universal answer. Anything that needs a secret — an API key, a
+licensed dataset, a paid third-party service — has to run on a server, because
+shipping the secret to the browser means giving it away. Anything that must be
+consistent across users, such as a shared database, needs a server too. And very
+large workloads eventually exceed what a browser tab can hold in memory.</p>
+
+<p>The rule of thumb is that pure transformations of text the user already has
+belong in the browser. Cleaning whitespace, removing duplicates, converting
+formats, encoding and decoding — none of these need anything the user has not
+already provided, so there is no technical reason to involve a server.</p>
+
+<h2>Why DevClean works this way</h2>
+
+<p>Every operation on this site is a pure function of the text you paste. There is
+nothing a server could contribute except latency and a copy of your data, so the
+processing happens in your browser and the text never leaves your machine.</p>
+
+<p>That claim is verifiable rather than promissory. Open the Network tab and watch,
+or turn off your connection and keep working — the tools carry on regardless. It is
+a better guarantee than a privacy policy, because it does not depend on anyone
+keeping their word.</p>
+
+      </article>
+
+      <!-- ad slot: inline -->
+
+      <div class="related">
+        <h2>More guides</h2>
+        <ul>
+        <li><a href="cleaning-messy-data-before-import.html">Cleaning Messy Text Data Before You Import It</a></li>
+        <li><a href="duplicate-lines-explained.html">Five Ways to Remove Duplicate Lines, and When to Use Each</a></li>
+        <li><a href="json-arrays-in-practice.html">JSON Arrays in Practice: Escaping, Types and Common Mistakes</a></li>
+        </ul>
+      </div>
+
+      <!-- ad slot: bottom -->
+
+    </div>
+
+  </main>
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-cols">
+        <div>
+          <h4>Popular tools</h4>
+          <ul>
+          <li><a href="../tools/remove-duplicate-lines.html">Remove Duplicate Lines</a></li>
+          <li><a href="../tools/remove-extra-spaces.html">Remove Extra Spaces</a></li>
+          <li><a href="../tools/list-to-json-array.html">List to JSON Array</a></li>
+          <li><a href="../tools/case-converter.html">Case Converter</a></li>
+          <li><a href="../tools/sort-lines.html">Sort Lines</a></li>
+            <li><a href="../index.html#tools">All tools →</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Guides</h4>
+          <ul>
+          <li><a href="../guides/cleaning-messy-data-before-import.html">Cleaning Messy Text Data Before You Im…</a></li>
+          <li><a href="../guides/duplicate-lines-explained.html">Five Ways to Remove Duplicate Lines, a…</a></li>
+          <li><a href="../guides/json-arrays-in-practice.html">JSON Arrays in Practice: Escaping, Typ…</a></li>
+          <li><a href="../guides/why-client-side-tools-matter.html">Why It Matters That a Text Tool Runs i…</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Project</h4>
+          <ul>
+            <li><a href="../about.html">About</a></li>
+            <li><a href="../api.html">Developer API</a></li>
+            <li><a href="../privacy.html">Privacy policy</a></li>
+            <li><a href="https://github.com/AlbertoMariaPareti/devclean" rel="noopener">Source on GitHub</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Alberto Maria Pareti</span>
+        <span>All processing happens in your browser.</span>
+        <span class="spacer"></span>
+        <span>Updated 2026-08-04</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../assets/tools.js"></script>
+  <script src="../assets/app.js"></script>
+</body>
+</html>

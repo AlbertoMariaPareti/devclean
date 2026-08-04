@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Privacy policy — DevClean</title>
+  <meta name="description" content="DevClean processes all text locally in your browser and never uploads it. Details on analytics, advertising cookies and your options.">
+  <link rel="canonical" href="https://albertomariapareti.github.io/devclean/privacy.html">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="DevClean">
+  <meta property="og:title" content="Privacy policy — DevClean">
+  <meta property="og:description" content="DevClean processes all text locally in your browser and never uploads it. Details on analytics, advertising cookies and your options.">
+  <meta property="og:url" content="https://albertomariapareti.github.io/devclean/privacy.html">
+  <meta property="og:image" content="https://albertomariapareti.github.io/devclean/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Privacy policy — DevClean">
+  <meta name="twitter:description" content="DevClean processes all text locally in your browser and never uploads it. Details on analytics, advertising cookies and your options.">
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧹</text></svg>">
+  <link rel="stylesheet" href="assets/style.css">
+  <link rel="sitemap" type="application/xml" href="https://albertomariapareti.github.io/devclean/sitemap.xml">
+
+  <script>
+    // Apply the saved theme before first paint to avoid a flash of the wrong colours.
+    (function () {
+      try {
+        var t = localStorage.getItem('devclean-theme');
+        if (!t) t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XRYP95S3EV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XRYP95S3EV');
+  </script>
+  <!-- AdSense: set ADSENSE_CLIENT in build.py once your account is approved -->
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="index.html">
+        <span class="brand-mark" aria-hidden="true">D</span>DevClean
+      </a>
+      <nav class="nav" aria-label="Main">
+        <a href="index.html#tools">Tools</a>
+        <a href="guides/index.html">Guides</a>
+        <a class="nav-hide-sm" href="api.html">API</a>
+        <a class="nav-hide-sm" href="about.html">About</a>
+        <button class="theme-toggle" type="button" aria-label="Switch theme">☀</button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="wrap">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><a href="index.html">Home</a><span>/</span>Privacy</nav>
+      <div class="prose">
+        <h1>Privacy policy</h1>
+        <p class="meta-line">Last updated 2026-08-04</p>
+
+        <h2>The text you paste</h2>
+        <p><strong>Text you enter into any tool on this site is never transmitted
+        anywhere.</strong> All processing happens locally in your browser using
+        JavaScript. The text is held in your browser's memory for as long as the page
+        is open and is discarded when you close or reload the tab. It is not sent to
+        a server, not written to a database, not logged, and not accessible to us or
+        to any third party.</p>
+
+        <p>You can verify this: open your browser's developer tools, switch to the
+        Network tab, and use any tool. No request is made. Alternatively, load a page
+        and then disconnect from the internet — the tools continue to work.</p>
+
+        <h2>Analytics</h2>
+        <p>This site uses Google Analytics to understand which pages are visited and
+        how many people use them. Analytics records page views, approximate location
+        derived from IP address, browser and device type, and referring site. It also
+        records which tool operation was run — the name of the operation only, never
+        the text it was run on.</p>
+        <p>Google Analytics sets cookies to distinguish returning visitors. You can
+        opt out with Google's
+        <a href="https://tools.google.com/dlpage/gaoptout" rel="noopener nofollow">browser
+        add-on</a>, or by blocking analytics scripts in your browser or an extension.
+        The tools work identically either way.</p>
+
+        <h2>Advertising</h2>
+        <p>This site displays advertising to cover its running costs. Advertising
+        partners may set cookies or use similar technologies to measure ad
+        performance and, where permitted, to show more relevant ads. These partners
+        receive standard request information such as your IP address, browser type
+        and the page being viewed.</p>
+        <p><strong>Advertising partners have no access to the text you paste into the
+        tools.</strong> That text never leaves your browser, so there is nothing to
+        share with anyone.</p>
+        <p>You can manage personalised advertising through
+        <a href="https://myadcenter.google.com/" rel="noopener nofollow">Google's Ad
+        Settings</a>, and review how Google uses data from partner sites at
+        <a href="https://policies.google.com/technologies/partner-sites" rel="noopener nofollow">
+        policies.google.com/technologies/partner-sites</a>.</p>
+
+        <h2>Local storage</h2>
+        <p>The site stores one item in your browser's local storage: your choice of
+        light or dark theme. It contains no personal information, is never sent
+        anywhere, and can be cleared at any time through your browser settings.</p>
+
+        <h2>Hosting</h2>
+        <p>The site is served as static files by GitHub Pages. As with any web host,
+        GitHub processes standard server request data, including IP addresses, to
+        deliver the pages. See
+        <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" rel="noopener nofollow">GitHub's
+        privacy statement</a>.</p>
+
+        <h2>Your rights</h2>
+        <p>Because the tools do not collect or store your text, there is no personal
+        data of that kind to access, correct or delete. For analytics and advertising
+        data, which are handled by Google, use the opt-out mechanisms linked above.
+        If you are in the EU or UK and have a question about data handled by this
+        site, email <a href="mailto:albertomariapareti@hotmail.com">albertomariapareti@hotmail.com</a>.</p>
+
+        <h2>Children</h2>
+        <p>This site is a general-purpose developer utility and is not directed at
+        children under 13. No information is knowingly collected from them.</p>
+
+        <h2>Changes</h2>
+        <p>If this policy changes, the date at the top of this page will be updated.
+        Material changes will be noted here.</p>
+
+        <h2>Contact</h2>
+        <p>Questions about this policy:
+        <a href="mailto:albertomariapareti@hotmail.com">albertomariapareti@hotmail.com</a>.</p>
+      </div>
+    </div>
+
+  </main>
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-cols">
+        <div>
+          <h4>Popular tools</h4>
+          <ul>
+          <li><a href="tools/remove-duplicate-lines.html">Remove Duplicate Lines</a></li>
+          <li><a href="tools/remove-extra-spaces.html">Remove Extra Spaces</a></li>
+          <li><a href="tools/list-to-json-array.html">List to JSON Array</a></li>
+          <li><a href="tools/case-converter.html">Case Converter</a></li>
+          <li><a href="tools/sort-lines.html">Sort Lines</a></li>
+            <li><a href="index.html#tools">All tools →</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Guides</h4>
+          <ul>
+          <li><a href="guides/cleaning-messy-data-before-import.html">Cleaning Messy Text Data Before You Im…</a></li>
+          <li><a href="guides/duplicate-lines-explained.html">Five Ways to Remove Duplicate Lines, a…</a></li>
+          <li><a href="guides/json-arrays-in-practice.html">JSON Arrays in Practice: Escaping, Typ…</a></li>
+          <li><a href="guides/why-client-side-tools-matter.html">Why It Matters That a Text Tool Runs i…</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Project</h4>
+          <ul>
+            <li><a href="about.html">About</a></li>
+            <li><a href="api.html">Developer API</a></li>
+            <li><a href="privacy.html">Privacy policy</a></li>
+            <li><a href="https://github.com/AlbertoMariaPareti/devclean" rel="noopener">Source on GitHub</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Alberto Maria Pareti</span>
+        <span>All processing happens in your browser.</span>
+        <span class="spacer"></span>
+        <span>Updated 2026-08-04</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/tools.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>

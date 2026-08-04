@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Remove HTML Tags from Text Online — Free HTML Stripper</title>
+  <meta name="description" content="Strip HTML tags and keep only readable text, with paragraph structure preserved and entities decoded. Also escapes and unescapes HTML.">
+  <link rel="canonical" href="https://albertomariapareti.github.io/devclean/tools/remove-html-tags.html">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="DevClean">
+  <meta property="og:title" content="Remove HTML Tags from Text Online — Free HTML Stripper">
+  <meta property="og:description" content="Strip HTML tags and keep only readable text, with paragraph structure preserved and entities decoded. Also escapes and unescapes HTML.">
+  <meta property="og:url" content="https://albertomariapareti.github.io/devclean/tools/remove-html-tags.html">
+  <meta property="og:image" content="https://albertomariapareti.github.io/devclean/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Remove HTML Tags from Text Online — Free HTML Stripper">
+  <meta name="twitter:description" content="Strip HTML tags and keep only readable text, with paragraph structure preserved and entities decoded. Also escapes and unescapes HTML.">
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧹</text></svg>">
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="sitemap" type="application/xml" href="https://albertomariapareti.github.io/devclean/sitemap.xml">
+
+  <script>
+    // Apply the saved theme before first paint to avoid a flash of the wrong colours.
+    (function () {
+      try {
+        var t = localStorage.getItem('devclean-theme');
+        if (!t) t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XRYP95S3EV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XRYP95S3EV');
+  </script>
+  <!-- AdSense: set ADSENSE_CLIENT in build.py once your account is approved -->
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Remove HTML Tags — DevClean","applicationCategory":"DeveloperApplication","operatingSystem":"Any (web browser)","url":"https://albertomariapareti.github.io/devclean/tools/remove-html-tags.html","description":"Strip HTML tags and keep only readable text, with paragraph structure preserved and entities decoded. Also escapes and unescapes HTML.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Will the paragraph structure survive?","acceptedAnswer":{"@type":"Answer","text":"Yes. Paragraphs, headings, list items, table rows and line breaks are converted into newlines, so the plain-text result keeps the shape of the original document instead of collapsing into one line."}},{"@type":"Question","name":"What happens to JavaScript and CSS in the page?","acceptedAnswer":{"@type":"Answer","text":"Script, style and noscript blocks are removed completely rather than having their contents dumped into the output, which is what most regex-based strippers do."}},{"@type":"Question","name":"Are HTML entities converted back to characters?","acceptedAnswer":{"@type":"Answer","text":"Yes. &amp;amp; becomes &amp;, &amp;nbsp; becomes a normal space, and so on, so the output is genuinely plain text."}},{"@type":"Question","name":"Is it safe to paste HTML from an untrusted source?","acceptedAnswer":{"@type":"Answer","text":"Yes. The markup is parsed in an inert document that does not execute scripts or load external resources, and nothing is sent anywhere."}}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://albertomariapareti.github.io/devclean/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://albertomariapareti.github.io/devclean/#tools"},{"@type":"ListItem","position":3,"name":"Remove HTML Tags","item":"https://albertomariapareti.github.io/devclean/tools/remove-html-tags.html"}]}</script>
+</head>
+<body data-default-op="strip_html">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../index.html">
+        <span class="brand-mark" aria-hidden="true">D</span>DevClean
+      </a>
+      <nav class="nav" aria-label="Main">
+        <a href="../index.html#tools">Tools</a>
+        <a href="../guides/index.html">Guides</a>
+        <a class="nav-hide-sm" href="../api.html">API</a>
+        <a class="nav-hide-sm" href="../about.html">About</a>
+        <button class="theme-toggle" type="button" aria-label="Switch theme">☀</button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="wrap">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><a href="../index.html">Home</a><span>/</span><a href="../index.html#tools">Tools</a><span>/</span>Remove HTML Tags</nav>
+      <h1>Remove HTML Tags from Text</h1>
+      <p class="lede">Turn a block of HTML into readable plain text. Paragraph breaks are kept, entities are decoded, and scripts and styles are discarded.</p>
+
+      <div class="tool">
+        <label class="field-label" for="input">
+          <span>Your text</span>
+          <span class="hint" id="input-meta"></span>
+        </label>
+        <textarea id="input" spellcheck="false" placeholder="Paste your text here — or drop a text file onto this box."></textarea>
+
+      <div class="options" role="radiogroup" aria-label="Operation">
+        <label class="chip"><input type="radio" name="op" value="strip_html" checked><span>Strip tags</span></label>
+        <label class="chip"><input type="radio" name="op" value="html_escape"><span>Escape HTML</span></label>
+        <label class="chip"><input type="radio" name="op" value="html_unescape"><span>Unescape entities</span></label>
+      </div>
+        <div class="actions">
+          <button type="button" id="process" class="btn-primary">Strip tags</button>
+          <button type="button" id="copy">Copy</button>
+          <button type="button" id="download" class="btn-ghost">Download</button>
+          <button type="button" id="clear" class="btn-ghost">Clear</button>
+        <button type="button" id="sample" class="btn-ghost" data-sample="&lt;div&gt;&lt;h2&gt;Title&lt;/h2&gt;&lt;p&gt;First &amp;amp; second paragraph.&lt;/p&gt;&lt;script&gt;alert(1)&lt;/script&gt;&lt;ul&gt;&lt;li&gt;One&lt;/li&gt;&lt;li&gt;Two&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;">Load example</button>
+          <span class="status" id="status" role="status" aria-live="polite"></span>
+        </div>
+
+        <div class="output-block">
+          <label class="field-label" for="output">
+            <span>Result</span>
+            <span class="hint" id="output-meta"></span>
+          </label>
+          <textarea id="output" readonly spellcheck="false" placeholder="The result appears here. Nothing is uploaded — the work happens in this tab."></textarea>
+        </div>
+      </div>
+
+      <!-- ad slot: top -->
+
+      <div class="prose">
+
+<h2>Parsing, not pattern matching</h2>
+<p>The obvious way to strip HTML is to delete everything between angle brackets.
+It works on tidy markup and fails on everything else — an attribute containing a
+<code>&gt;</code>, an unclosed tag, a comment containing markup, or a
+<code>&lt;script&gt;</code> block whose contents are left behind as visible
+gibberish.</p>
+
+<p>This tool hands your input to the browser's own HTML parser instead, the same
+engine that renders pages, and then reads back the text. Malformed markup is
+handled the way a browser would handle it, and the result is what a reader would
+actually see.</p>
+
+<h2>Structure is preserved</h2>
+<p>Naively extracting text collapses everything into one long line, because HTML
+uses tags rather than newlines for structure. Here, block-level elements —
+paragraphs, headings, list items, table rows, <code>&lt;br&gt;</code> — become line
+breaks, so a stripped article still reads as paragraphs and a stripped list still
+reads as a list. Runs of blank lines are collapsed to one so the result does not
+end up full of gaps.</p>
+
+<p><code>&lt;script&gt;</code>, <code>&lt;style&gt;</code> and
+<code>&lt;noscript&gt;</code> blocks are removed entirely. Their contents are code,
+not content, and leaving them in is the most common flaw in simple HTML strippers.</p>
+
+<h2>Entities are decoded</h2>
+<p>Stripping tags without decoding entities leaves you with <code>&amp;amp;</code>
+where an ampersand should be and <code>&amp;nbsp;</code> where a space should be.
+Both are decoded here, so the output is genuinely plain text rather than
+half-decoded HTML.</p>
+
+<h2>The two inverse operations</h2>
+<p><strong>Escape HTML</strong> does the opposite job: it converts
+<code>&lt;</code>, <code>&gt;</code>, <code>&amp;</code> and quotes into entities so
+that a snippet of code can be displayed on a page as text rather than being
+interpreted as markup. This is what you need when you want to show an HTML example
+inside an HTML document.</p>
+
+<p><strong>Unescape entities</strong> converts them back. It is the fix for text
+that has been escaped twice somewhere in a pipeline and now shows
+<code>&amp;amp;lt;</code> to your readers.</p>
+
+<div class="callout">
+<p><strong>On safety:</strong> the parsing here does not execute scripts or load
+external resources, so pasting untrusted HTML is safe. Do note that escaping for
+display is only one part of preventing injection attacks — server-side handling
+matters just as much.</p>
+</div>
+
+      </div>
+
+      <!-- ad slot: inline -->
+
+      <div class="prose">
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <details>
+        <summary>Will the paragraph structure survive?</summary>
+        <div><p>Yes. Paragraphs, headings, list items, table rows and line breaks are converted into newlines, so the plain-text result keeps the shape of the original document instead of collapsing into one line.</p></div>
+      </details>
+      <details>
+        <summary>What happens to JavaScript and CSS in the page?</summary>
+        <div><p>Script, style and noscript blocks are removed completely rather than having their contents dumped into the output, which is what most regex-based strippers do.</p></div>
+      </details>
+      <details>
+        <summary>Are HTML entities converted back to characters?</summary>
+        <div><p>Yes. <code>&amp;amp;</code> becomes <code>&amp;</code>, <code>&amp;nbsp;</code> becomes a normal space, and so on, so the output is genuinely plain text.</p></div>
+      </details>
+      <details>
+        <summary>Is it safe to paste HTML from an untrusted source?</summary>
+        <div><p>Yes. The markup is parsed in an inert document that does not execute scripts or load external resources, and nothing is sent anywhere.</p></div>
+      </details>
+    </div>
+      </div>
+
+      <div class="related">
+        <h2>Other tools</h2>
+        <ul>
+        <li><a href="remove-duplicate-lines.html">Remove Duplicate Lines</a></li>
+        <li><a href="remove-extra-spaces.html">Remove Extra Spaces</a></li>
+        <li><a href="list-to-json-array.html">List to JSON Array</a></li>
+        <li><a href="case-converter.html">Case Converter</a></li>
+        <li><a href="sort-lines.html">Sort Lines</a></li>
+        </ul>
+      </div>
+
+      <!-- ad slot: bottom -->
+
+    </div>
+
+  </main>
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-cols">
+        <div>
+          <h4>Popular tools</h4>
+          <ul>
+          <li><a href="../tools/remove-duplicate-lines.html">Remove Duplicate Lines</a></li>
+          <li><a href="../tools/remove-extra-spaces.html">Remove Extra Spaces</a></li>
+          <li><a href="../tools/list-to-json-array.html">List to JSON Array</a></li>
+          <li><a href="../tools/case-converter.html">Case Converter</a></li>
+          <li><a href="../tools/sort-lines.html">Sort Lines</a></li>
+            <li><a href="../index.html#tools">All tools →</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Guides</h4>
+          <ul>
+          <li><a href="../guides/cleaning-messy-data-before-import.html">Cleaning Messy Text Data Before You Im…</a></li>
+          <li><a href="../guides/duplicate-lines-explained.html">Five Ways to Remove Duplicate Lines, a…</a></li>
+          <li><a href="../guides/json-arrays-in-practice.html">JSON Arrays in Practice: Escaping, Typ…</a></li>
+          <li><a href="../guides/why-client-side-tools-matter.html">Why It Matters That a Text Tool Runs i…</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Project</h4>
+          <ul>
+            <li><a href="../about.html">About</a></li>
+            <li><a href="../api.html">Developer API</a></li>
+            <li><a href="../privacy.html">Privacy policy</a></li>
+            <li><a href="https://github.com/AlbertoMariaPareti/devclean" rel="noopener">Source on GitHub</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Alberto Maria Pareti</span>
+        <span>All processing happens in your browser.</span>
+        <span class="spacer"></span>
+        <span>Updated 2026-08-04</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../assets/tools.js"></script>
+  <script src="../assets/app.js"></script>
+</body>
+</html>
