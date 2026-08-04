@@ -133,6 +133,10 @@
                 <p>You can process up to 200,000 characters (approx. 200 KB) per single request, making it suitable for large log files.</p>
             </div>
         </div>
+
+        <footer style="margin-top: 30px; padding-top: 15px; border-top: 1px solid #e2e8f0; font-size: 0.85em; color: #64748b;">
+            <a href="privacy.html" style="color: #64748b; text-decoration: underline;">Privacy Policy</a>
+        </footer>
     </div>
 
     <div class="ad-container">
@@ -140,9 +144,10 @@
     </div>
 
     <script>
-       const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
             ? 'http://127.0.0.1:8000'
             : 'https://devclean-backend.onrender.com';
+
         async function cleanText() {
             const inputText = document.getElementById('inputText').value;
             const option = document.getElementById('option').value;
