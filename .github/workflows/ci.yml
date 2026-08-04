@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Lint, parity, API, site
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt -r requirements-dev.txt
+
+      - name: Lint
+        run: ruff check .
+
+      # The browser engine and the API implement the same 40 operations twice.
+      # This is the test that keeps them from drifting apart.
+      - name: Browser/API parity
+        run: python tests/test_parity.py
+
+      - name: API behaviour
+        run: python tests/test_api.py
+
+      - name: Build the site
+        run: python build.py
+
+      - name: Site checks (links, metadata, JSON-LD, a11y)
+        run: python tests/test_site.py
+
+      # docs/ is what GitHub Pages serves and it is committed, so it must match
+      # what build.py produces from src/content.py. A hand-edited page in docs/
+      # would otherwise survive until the next build silently overwrote it.
+      - name: docs/ matches the generator output
+        run: |
+          if [ -n "$(git status --porcelain -- docs)" ]; then
+            echo "::error::docs/ is out of date. Run 'python build.py' and commit the result."
+            git status --porcelain -- docs
+            git diff -- docs | head -100
+            exit 1
+          fi
+          echo "docs/ is in sync with build.py"
