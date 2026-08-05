@@ -39,8 +39,15 @@ jobs:
       - name: API behaviour
         run: python tests/test_api.py
 
+      # Rebuild with the date the committed site was built with, read out of the
+      # committed sitemap. Without this the rebuild would stamp today's date
+      # into every page and the comparison below would fail every day after a
+      # commit, for no reason other than the calendar moving.
       - name: Build the site
-        run: python build.py
+        run: |
+          BUILD_DATE=$(grep -m1 -oE '[0-9]{4}-[0-9]{2}-[0-9]{2}' docs/sitemap.xml)
+          echo "Rebuilding with BUILD_DATE=$BUILD_DATE"
+          BUILD_DATE="$BUILD_DATE" python build.py
 
       - name: Site checks (links, metadata, JSON-LD, a11y)
         run: python tests/test_site.py
