@@ -61,7 +61,14 @@ SUPPORT_URL = ""             # e.g. "https://buymeacoffee.com/yourname"
 API_BASE_URL = "https://devclean-backend.onrender.com"
 
 OUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "docs")
-TODAY = date.today().isoformat()
+
+# The build stamps a date into every page footer and into sitemap.xml. That
+# makes the output depend on *when* it ran, so CI cannot simply rebuild and
+# diff against the committed docs/ — the check would turn red the day after
+# every commit, with nothing actually wrong. BUILD_DATE lets CI rebuild with
+# the date the committed site was built with, so the comparison sees content
+# changes only. A normal local build just uses today.
+TODAY = os.environ.get("BUILD_DATE") or date.today().isoformat()
 
 # ==========================================================================
 # Small helpers
@@ -204,7 +211,7 @@ def footer(depth):
         </div>
       </div>
       <div class="footer-bottom">
-        <span>© {date.today().year} {esc(AUTHOR)}</span>
+        <span>© {TODAY[:4]} {esc(AUTHOR)}</span>
         <span>All processing happens in your browser.</span>
 {support}        <span class="spacer"></span>
         <span>Updated {TODAY}</span>
